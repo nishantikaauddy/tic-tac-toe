@@ -1,3 +1,8 @@
+export const DEFAULT_PLAYER_NAMES = {
+    X: "Player1",
+    O: "Player2",
+}
+  
 export const GAME_ARRAY = [
     [null, null, null],
     [null, null, null],

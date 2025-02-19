@@ -8,42 +8,25 @@ import {
   handlePlayerNameSave,
   deriveActivePlayer,
   toggleActivePlayer,
+  initializeGameBoard,
+  checkWinner,
   restartMatch,
 } from "./helper/GameHelper";
 
-import { GAME_ARRAY, WINNING_COMBINATIONS } from "./utils/GameArray";
+import {
+  DEFAULT_PLAYER_NAMES,
+  GAME_ARRAY,
+  WINNING_COMBINATIONS,
+} from "./utils/GameConstants";
 import GameOver from "./components/GameOver";
 
 function App() {
-  const [playerData, setPlayerData] = useState({
-    X: "Player1",
-    O: "Player2",
-  });
+  const [playerData, setPlayerData] = useState(DEFAULT_PLAYER_NAMES);
   const [gameTurns, setGameTurns] = useState([]);
   const activePlayer = deriveActivePlayer(gameTurns);
-
-  let board = [...GAME_ARRAY.map((innerArray) => [...innerArray])];
-  for (const turn of gameTurns) {
-    const { row, col } = { ...turn.square };
-    board[row][col] = turn.player;
-  }
-
-  let winner = null;
-  let isDraw = gameTurns.length === 9 && !winner;
-
-  for (const combination of WINNING_COMBINATIONS) {
-    let firstSymbol = board[combination[0].row][combination[0].col];
-    let secondSymbol = board[combination[1].row][combination[1].col];
-    let thirdSymbol = board[combination[2].row][combination[2].col];
-
-    if (
-      firstSymbol &&
-      firstSymbol === secondSymbol &&
-      firstSymbol === thirdSymbol
-    ) {
-      winner = playerData[firstSymbol];
-    }
-  }
+  const board = initializeGameBoard(GAME_ARRAY, gameTurns);
+  const winner = checkWinner(WINNING_COMBINATIONS, board, playerData);
+  const isDraw = gameTurns.length === 9 && !winner;
 
   return (
     <>
@@ -51,14 +34,14 @@ function App() {
         <ol id="players" className="highlight-player">
           <Player
             playerSymbol="X"
-            initialName="Player1"
+            initialName={DEFAULT_PLAYER_NAMES.X}
             isActive={activePlayer === "X"}
             onNameChange={handlePlayerNameSave}
             setPlayerData={setPlayerData}
           />
           <Player
             playerSymbol="O"
-            initialName="Player2"
+            initialName={DEFAULT_PLAYER_NAMES.O}
             isActive={activePlayer === "O"}
             onNameChange={handlePlayerNameSave}
             setPlayerData={setPlayerData}
