@@ -1,3 +1,12 @@
+export function handlePlayerNameSave(setPlayerData, symbol, name) {
+    setPlayerData(prevData => {
+        return {
+            ...prevData,
+            [symbol]: name,
+        }
+    });
+}
+
 export function deriveActivePlayer(turns) {
     return (turns.length>0 && turns[0].player === 'X') ? 'O' : 'X';
 }

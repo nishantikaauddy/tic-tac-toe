@@ -5,6 +5,7 @@ import GameBoard from "./components/GameBoard";
 import Logs from "./components/Logs";
 
 import {
+  handlePlayerNameSave,
   deriveActivePlayer,
   toggleActivePlayer,
   restartMatch,
@@ -14,6 +15,10 @@ import { GAME_ARRAY, WINNING_COMBINATIONS } from "./utils/GameArray";
 import GameOver from "./components/GameOver";
 
 function App() {
+  const [playerData, setPlayerData] = useState({
+    X: "Player1",
+    O: "Player2",
+  });
   const [gameTurns, setGameTurns] = useState([]);
   const activePlayer = deriveActivePlayer(gameTurns);
 
@@ -36,7 +41,7 @@ function App() {
       firstSymbol === secondSymbol &&
       firstSymbol === thirdSymbol
     ) {
-      winner = firstSymbol;
+      winner = playerData[firstSymbol];
     }
   }
 
@@ -48,11 +53,15 @@ function App() {
             playerSymbol="X"
             initialName="Player1"
             isActive={activePlayer === "X"}
+            onNameChange={handlePlayerNameSave}
+            setPlayerData={setPlayerData}
           />
           <Player
             playerSymbol="O"
             initialName="Player2"
             isActive={activePlayer === "O"}
+            onNameChange={handlePlayerNameSave}
+            setPlayerData={setPlayerData}
           />
         </ol>
         {(winner || isDraw) && (

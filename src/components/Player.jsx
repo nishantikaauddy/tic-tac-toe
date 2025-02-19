@@ -1,12 +1,13 @@
 import { useState } from "react";
 
 export default function Player(props) {
-  let { playerSymbol } = { ...props };
+  let { playerSymbol, isActive, onNameChange, setPlayerData } = { ...props };
   const [editing, setEditing] = useState(false);
   const [playerName, setPlayerName] = useState(props.initialName);
 
   function toggleEdit() {
     setEditing((editMode) => !editMode);
+    editing && onNameChange(setPlayerData, playerSymbol, playerName);
   }
 
   function handleNameChange(event) {
@@ -14,7 +15,7 @@ export default function Player(props) {
   }
 
   return (
-    <li className={props.isActive ? "active" : undefined}>
+    <li className={isActive ? "active" : undefined}>
       <span className="player">
         {editing ? (
           <input
